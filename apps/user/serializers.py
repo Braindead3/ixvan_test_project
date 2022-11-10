@@ -71,19 +71,11 @@ class TransactionSerializer(serializers.ModelSerializer):
     def save(self, **kwargs):
         if self.is_valid():
             user: User = User.objects.get(pk=self.context['user_id'])
-            category: Category = Category.objects.get(name=self.validated_data['category'], user=user)
-            user_pofile: UserProfile = UserProfile.objects.get(user=user)
             if self.instance is not None:
                 self.instance = self.update(self.instance, self.validated_data)
                 return self.instance
 
             transaction = Transaction.objects.create(**self.validated_data, user=user)
-
-            if transaction.type == 'top up':
-                user_pofile.balance += transaction.sum
-            else:
-                user_pofile.balance -= transaction.sum
-            user_pofile.save()
             return transaction
         else:
             return self.errors
