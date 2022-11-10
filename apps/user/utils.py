@@ -4,7 +4,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 
-from .models import Transaction
+from .models import Transaction, Category
 
 today = datetime.date.today()
 
@@ -45,5 +45,17 @@ def create_statistics(user: User) -> dict:
     for transaction in month_transactions:
         stat['total_spending'] = stat['day_spending'] + transaction.sum
 
-    print(stat)
     return stat
+
+
+def create_base_categories(categories: tuple, user: User) -> None:
+    """
+    Create base categories for new user.
+
+    :param categories: Base categories
+    :param user: Created user
+
+    """
+    for base_category in categories:
+        new_base_category = Category(name=base_category, user=user)
+        new_base_category.save()

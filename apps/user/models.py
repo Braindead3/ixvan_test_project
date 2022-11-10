@@ -33,4 +33,4 @@ class Transaction(models.Model):
     user: User = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 
     def __str__(self):
-        return self.organization
+        return self.category.name

@@ -1,7 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from .base_category import base_categories
 from .models import Category, Transaction, UserProfile
 
 
@@ -36,26 +35,9 @@ class UserSerializer(serializers.ModelSerializer):
             user.set_password(password1)
             user.save()
 
-            self.create_base_categories(base_categories, user)
-
-            UserProfile.objects.create(user=user, balance=0)
-
             return user
         else:
             return self.errors
-
-    @staticmethod
-    def create_base_categories(categories: tuple, user: User) -> None:
-        """
-        Create base categories for new user.
-
-        :param categories: Base categories
-        :param user: Created user
-
-        """
-        for base_category in categories:
-            new_base_category = Category(name=base_category, user=user)
-            new_base_category.save()
 
 
 class CategorySerializer(serializers.ModelSerializer):
