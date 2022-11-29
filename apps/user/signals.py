@@ -27,9 +27,9 @@ def user_created_handler(sender, instance, created, **kwargs) -> None:
 def transaction_created_handler(sender, instance, created, **kwargs) -> None:
     if created:
         user_pofile: UserProfile = UserProfile.objects.get(user=instance.user)
-
-        if instance.type == 'top up':
-            user_pofile.balance += instance.sum
-        else:
-            user_pofile.balance -= instance.sum
+        if instance.sum is not None:
+            if instance.type == 'top up':
+                user_pofile.balance += instance.sum
+            else:
+                user_pofile.balance -= instance.sum
         user_pofile.save()

@@ -66,7 +66,8 @@ class CategorySerializer(serializers.ModelSerializer):
 class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
-        fields = ['sum', 'category', 'organization', 'description', 'time', 'type']
+        fields = ['sum', 'category', 'organization', 'description', 'type']
+        read_only_fields = ('time',)
 
     def save(self, **kwargs):
         if self.is_valid():
